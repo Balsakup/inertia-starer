@@ -1,0 +1,16 @@
+/public/hot
+/public/storage
+/public/assets
+/public/vendor
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+/.idea
+/.vscode
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.phps
