@@ -11,7 +11,11 @@ class LoginViewResponse implements LoginViewResponseContract
     public function toResponse($request): Response|null
     {
         if ($request->routeIs('admin::authenticated_session.create')) {
-            return Inertia::render('AuthenticatedSession/Create')->toResponse($request);
+            return Inertia::render('AuthenticatedSession/Create')
+                ->with([
+                    'title' => __('Sign in'),
+                ])
+                ->toResponse($request);
         }
 
         return null;

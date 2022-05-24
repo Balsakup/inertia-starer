@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Users\StoreRequest;
+use App\Http\Requests\Users\UpdateRequest;
 use App\Models\User;
 use App\QueryBuilder\Filters\Users\SearchFilter;
 use App\QueryBuilder\Sorts\Users\NameSort;
@@ -18,6 +19,11 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(User::class);
+    }
+
     public function index(Request $request): Response
     {
         $paginator = QueryBuilder::for(User::class, $request)
@@ -124,6 +130,19 @@ class UsersController extends Controller
             'user' => $user,
             'roles' => $roles,
         ]);
+    }
+
+    public function update(UpdateRequest $request, User $user): RedirectResponse
+    {
+        $user->update($request->validated());
+
+        if ($request->role_id) {
+            $user->syncRoles($request->role_id);
+        }
+
+        return redirect()
+            ->route('admin::users.index')
+            ->with('toast.success', __('User :full_name has been updated', ['full_name' => $user->full_name]));
     }
 
     public function destroy(User $user): RedirectResponse

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\UserEmailVerificationController;
 use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
@@ -24,8 +23,5 @@ Route::middleware("auth:$fortifyGuard")->group(static function () {
     Route::get('users/{user}', [UsersController::class, 'edit'])->name('users.edit');
     Route::put('users/{user}', [UsersController::class, 'update'])->name('users.update');
     Route::delete('users/{user}', [UsersController::class, 'destroy'])->name('users.destroy');
-
-    Route::post('user/{user}/send-email-verification', UserEmailVerificationController::class)
-        ->name('user.sendEmailVerification');
 });
 

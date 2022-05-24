@@ -13,8 +13,8 @@ import {
     Table,
     Tooltip
 } from 'react-bootstrap';
-import {AlertTriangle, ChevronDown, ChevronsUpDown, ChevronUp, Edit, Search, Send, Trash} from 'lucide-react';
-import {Link} from '@inertiajs/inertia-react';
+import {AlertTriangle, ChevronDown, ChevronsUpDown, ChevronUp, Edit, Search, Trash} from 'lucide-react';
+import {Link, usePage} from '@inertiajs/inertia-react';
 import {Inertia} from '@inertiajs/inertia';
 import {route} from '../../utils/route';
 import {useDebounce} from 'use-debounce';
@@ -70,6 +70,7 @@ function Index({paginator}) {
     const [searchDebounced] = useDebounce(search, 300);
     const [limit, setLimit] = useLimitState();
     const [userConfirmation, setUserConfirmation] = useState(null);
+    const {auth} = usePage().props;
 
     function toggleSort(event, column) {
         event.preventDefault();
@@ -248,29 +249,33 @@ function Index({paginator}) {
                                     <td>{user.formatted_created_at}</td>
                                     <td>{user.formatted_updated_at}</td>
                                     <td className="text-end">
-                                        {! user.email_verified_at && (
-                                            <OverlayTrigger overlay={<Tooltip>Resend email verification</Tooltip>}>
-                                                <Link href={route('admin::user.sendEmailVerification', {user})}
-                                                      className="btn btn-icon btn-link"
-                                                      as="button"
-                                                      method="post">
-                                                    <Send className="icon"/>
-                                                </Link>
-                                            </OverlayTrigger>
+                                        {/*{! user.email_verified_at && (*/}
+                                        {/*    <OverlayTrigger overlay={<Tooltip>Resend email verification</Tooltip>}>*/}
+                                        {/*        <Link href={route('admin::user.sendEmailVerification', {user})}*/}
+                                        {/*              className="btn btn-icon btn-link"*/}
+                                        {/*              as="button"*/}
+                                        {/*              method="post">*/}
+                                        {/*            <Send className="icon"/>*/}
+                                        {/*        </Link>*/}
+                                        {/*    </OverlayTrigger>*/}
+                                        {/*)}*/}
+                                        {auth.id !== user.id && (
+                                            <>
+                                                <OverlayTrigger overlay={<Tooltip>Edit {user.full_name}</Tooltip>}>
+                                                    <Link href={route('admin::users.edit', {user})}
+                                                          className="btn btn-icon btn-link">
+                                                        <Edit className="icon"/>
+                                                    </Link>
+                                                </OverlayTrigger>
+                                                <OverlayTrigger overlay={<Tooltip>Delete {user.full_name}</Tooltip>}>
+                                                    <Button variant="link"
+                                                            className="btn-icon"
+                                                            onClick={() => setUserConfirmation(user)}>
+                                                        <Trash className="icon text-danger"/>
+                                                    </Button>
+                                                </OverlayTrigger>
+                                            </>
                                         )}
-                                        <OverlayTrigger overlay={<Tooltip>Edit {user.full_name}</Tooltip>}>
-                                            <Link href={route('admin::users.edit', {user})}
-                                                  className="btn btn-icon btn-link">
-                                                <Edit className="icon"/>
-                                            </Link>
-                                        </OverlayTrigger>
-                                        <OverlayTrigger overlay={<Tooltip>Delete {user.full_name}</Tooltip>}>
-                                            <Button variant="link"
-                                                    className="btn-icon"
-                                                    onClick={() => setUserConfirmation(user)}>
-                                                <Trash className="icon text-danger"/>
-                                            </Button>
-                                        </OverlayTrigger>
                                     </td>
                                 </tr>
                             ))}

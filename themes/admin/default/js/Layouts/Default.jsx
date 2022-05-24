@@ -1,21 +1,29 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import Sidebar from './Partials/Default/Sidebar';
 import Header from './Partials/Default/Header';
-import {usePage} from '@inertiajs/inertia-react';
+import {Head, usePage} from '@inertiajs/inertia-react';
 import {toast as notify, ToastContainer} from 'react-toastify';
 
 function Default({children}) {
-    const {toast} = usePage().props;
+    const [initialized, setInitialized] = useState(false);
+    const {toast, app, title} = usePage().props;
 
-    for (const [type, message] of Object.entries(toast)) {
-        notify(message, {
-            type
-        });
-    }
+    useEffect(() => {
+        if (! initialized) {
+            setInitialized(true);
+
+            return;
+        }
+
+        for (const [type, message] of Object.entries(toast)) {
+            notify(message, {type});
+        }
+    }, [initialized]);
 
     return (
         <>
+            <Head title={app.name + (title ? ` | ${title}` : '')}/>
             <div className="page">
                 <Sidebar/>
                 <Header/>

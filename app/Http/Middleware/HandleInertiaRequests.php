@@ -27,8 +27,18 @@ class HandleInertiaRequests extends Middleware
 
     public function share(Request $request): array
     {
+        /** @var \App\Models\User&\Illuminate\Contracts\Auth\Authenticatable $authUser */
+        $authUser = $request->user();
+
         return array_merge(parent::share($request), [
-            'toast' => $request->session()->get('toast'),
+            'app' => [
+                'name' => config('app.name'),
+            ],
+            'auth' => $authUser?->append('thumb_avatar_url')->only([
+                'full_name',
+                'thumb_avatar_url',
+            ]),
+            'toast' => $request->session()->get('toast', []),
         ]);
     }
 }

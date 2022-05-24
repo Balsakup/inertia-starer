@@ -36,7 +36,8 @@ function Create() {
                                   value={data.email}
                                   onChange={(event) => setData('email', event.target.value)}
                                   placeholder="Enter email"
-                                  isInvalid={errors.email}/>
+                                  isInvalid={errors.email}
+                                  tabIndex={1}/>
                     {errors.email && (
                         <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
                     )}
@@ -45,7 +46,7 @@ function Create() {
                     <Form.Label>
                         Password
                         <span className="form-label-description">
-                            <Link href="#">I forgot password</Link>
+                            <Link href="#" tabIndex={5}>I forgot password</Link>
                         </span>
                     </Form.Label>
                     <InputGroup className="input-group-flat">
@@ -53,7 +54,8 @@ function Create() {
                                       value={data.password}
                                       onChange={(event) => setData('password', event.target.value)}
                                       placeholder="Password"
-                                      isInvalid={errors.password}/>
+                                      isInvalid={errors.password}
+                                      tabIndex={2}/>
                         <InputGroup.Text className={errors.password ? 'border-danger' : undefined}>
                             <OverlayTrigger overlay={
                                 <Tooltip>{passwordVisible ? 'Hide password' : 'Show password'}</Tooltip>
@@ -77,10 +79,13 @@ function Create() {
                                 label="Remember me on this devis"
                                 isInvalid={errors.remember}
                                 feedbackType="invalid"
-                                feedback={errors.remember}/>
+                                feedback={errors.remember}
+                                tabIndex={3}/>
                 </Form.Group>
                 <div className="form-footer">
-                    <Button type="submit" variant="primary" className="w-100" disabled={processing}>Sign in</Button>
+                    <Button type="submit" variant="primary" className="w-100" disabled={processing} tabIndex={4}>
+                        Sign in
+                    </Button>
                 </div>
             </Card.Body>
         </Form>
